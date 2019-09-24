@@ -5,13 +5,20 @@
 class Player : public Entity
 {
 public:
-	Player(const sf::Vector2<int>& pos, const sf::Vector2<int>& size);
+	Player();
 	virtual ~Player();
 
-	static void Initialize(const std::string& textureName);
+	static void Init(const std::string& textureName);
+	 
+	void Update() override;
 
-	virtual const sf::Vector2f& getPosition() const override;
+	EntityType GetType() const override;
+	virtual const sf::Vector2f& GetPosition() const override;
 	virtual sf::Sprite GetSprite() override;
+
 private:
+	void Movement();
+	
 	sf::Sprite mSprite;
+	EntityType mType;
 };

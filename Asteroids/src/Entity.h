@@ -2,12 +2,19 @@
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
 
-class Entity
+enum EntityType
 {
-public:
-	virtual ~Entity() = default;
-
-	virtual const sf::Vector2f& getPosition() const = 0;
-	virtual sf::Sprite GetSprite() = 0;
+	NoType = 0, PlayerType, EnemyType, PickupType
 };
 
+class Entity
+{
+public:	
+	virtual ~Entity() = default;
+
+	virtual void Update() = 0;
+
+	virtual EntityType GetType() const = 0;
+	virtual const sf::Vector2f& GetPosition() const = 0;
+	virtual sf::Sprite GetSprite() = 0;
+};
