@@ -1,9 +1,19 @@
 #include "Game.h"
+#include "EntityManager.h"
 
 Game::Game(const sf::VideoMode videoMode, const std::string& title)
 	: mWindow(videoMode, title)
 {
-	
+	EntityManager<Player> manager{"player.png", [](const sf::Texture& tex)->Player
+	{
+		return Player(tex);
+	}};
+
+
+
+
+
+	manager.newEntity();
 }
 
 Game::~Game()

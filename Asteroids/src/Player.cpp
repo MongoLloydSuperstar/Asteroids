@@ -6,12 +6,12 @@ static const float PLAYER_SPEED = 5.0f;
 static const sf::Vector2f PLAYER_SCALE = sf::Vector2f(0.5f, 0.5f);
 static const sf::Vector2f PLAYER_START_POS = sf::Vector2f(0.5f, 0.5f);
 
-static sf::Texture sShipTexture;
+
 
 Player::Player()
 	: mType(EntityType::PlayerType)
 {
-	mSprite.setTexture(sShipTexture);
+	//mSprite.setTexture(sShipTexture);
 	mSprite.setPosition(PLAYER_START_POS);
 	mSprite.setScale(PLAYER_SCALE);
 }
@@ -22,8 +22,8 @@ Player::~Player()
 
 void Player::Init(const std::string& textureName)
 {
-	sShipTexture.loadFromFile(textureName);
-	sShipTexture.setSmooth(true);	
+	//sShipTexture.loadFromFile(textureName);
+	//sShipTexture.setSmooth(true);	
 }
 
 void Player::Update()
