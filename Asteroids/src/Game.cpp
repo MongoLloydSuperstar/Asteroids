@@ -1,26 +1,15 @@
 #include "Game.h"
-#include "EntityManager.h"
 
 Game::Game(const sf::VideoMode videoMode, const std::string& title)
 	: mWindow(videoMode, title)
 {
-	EntityManager<Player> manager{"player.png", [](const sf::Texture& tex)->Player
-	{
-		return Player(tex);
-	}};
-
-
-
-
-
-	manager.newEntity();
 }
 
 Game::~Game()
 {
 	for (Entity* e : mEntities)
 	{
-		delete mEntities[0];
+		delete e;
 	}
 	mEntities.clear();
 }
@@ -47,6 +36,9 @@ void Game::Update()
 	{
 		e->Update();
 	}
+
+	SpawnAsteroid(Asteroid::SPAWN_COOLDOWN);
+	SpawnCoin(Coin::SPAWN_COOLDOWN);
 }
 
 void Game::Render()
@@ -55,7 +47,7 @@ void Game::Render()
 	
 	for (Entity* e : mEntities)
 	{
-		mWindow.draw(e->GetSprite());
+		mWindow.draw(*e->GetSprite());
 	}
 	
 	mWindow.display();
@@ -65,12 +57,28 @@ void Game::Init()
 {
 	mWindow.setVerticalSyncEnabled(true);
 	
-	Player::Init("ShipSprite.psd");
-
-	mEntities.push_back(new Player(sf::Vector2f(400, 300)));
+	mEntities.push_back(mFactory.CreatePlayer());
 }
 
 sf::RenderWindow& Game::GetRenderWindow()
 {
 	return mWindow;
+}
+
+void Game::SpawnAsteroid(float cooldown)
+{
+	if (mAsteroidClock.getElapsedTime().asSeconds() >= cooldown)
+	{
+		mEntities.push_back(mFactory.CreateAsteroid());
+		mAsteroidClock.restart();
+	}
+}
+
+void Game::SpawnCoin(float cooldown)
+{
+	if (mCoinClock.getElapsedTime().asSeconds() >= cooldown)
+	{
+		mEntities.push_back(mFactory.CreateCoin());
+		mCoinClock.restart();
+	}
 }

@@ -1,9 +1,8 @@
 #pragma once
 
 #include "Entity.h"
-#include "Player.h"
-
 #include <vector>
+#include "EntityFactory.h"
 
 class Game
 {
@@ -21,9 +20,18 @@ public:
 	sf::RenderWindow& GetRenderWindow();
 
 private:
+	void SpawnAsteroid(float cooldown);
+	void SpawnCoin(float cooldown);
+	
+	
+private:
 	typedef std::vector<Entity*> entities_t;
-		
+
+	EntityFactory mFactory;
 	entities_t mEntities;
+
 	sf::RenderWindow mWindow;
+	sf::Clock mAsteroidClock;
+	sf::Clock mCoinClock;
 };
 

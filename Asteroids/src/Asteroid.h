@@ -2,14 +2,14 @@
 
 #include "Entity.h"
 
-class Player : public Entity
+class Asteroid : public Entity
 {
 public:
 	void Update() override;
 
-	Player();
-	explicit Player(const Player& other);
-	virtual ~Player();
+	Asteroid();
+	explicit Asteroid(const Asteroid& other);
+	virtual ~Asteroid();
 
 	EntityType GetType() const override;
 	virtual const sf::Vector2f& GetPosition() const override;
@@ -17,8 +17,15 @@ public:
 
 private:
 	void Movement();
+	sf::Vector2f RandomStartPos();
 
+public:
+	static const float SPAWN_COOLDOWN;
+	
+private:
 	sf::Sprite* mSprite;
 	sf::Texture* mTexture;
 	EntityType mType;
+
 };
+

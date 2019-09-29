@@ -2,34 +2,47 @@
 
 #include <iostream>
 
-static const float PLAYER_SPEED = 5.0f;
-static const sf::Vector2f PLAYER_SCALE = sf::Vector2f(0.5f, 0.5f);
-static const sf::Vector2f PLAYER_START_POS = sf::Vector2f(0.5f, 0.5f);
+const EntityType TYPE = PlayerType;
 
+const float SPEED = 5.0f;
+const sf::Vector2f SCALE(1.0f, 1.0f);
+const sf::Vector2f START_POS(400.0f, 300.0f);
 
+const std::string FILENAME("ShipSprite.psd");
 
-Player::Player()
-	: mType(EntityType::PlayerType)
-{
-	//mSprite.setTexture(sShipTexture);
-	mSprite.setPosition(PLAYER_START_POS);
-	mSprite.setScale(PLAYER_SCALE);
-}
-
-Player::~Player()
-{
-}
-
-void Player::Init(const std::string& textureName)
-{
-	//sShipTexture.loadFromFile(textureName);
-	//sShipTexture.setSmooth(true);	
-}
 
 void Player::Update()
 {
 	Movement();
 }
+
+#pragma region Con-/Destructors
+Player::Player()
+	: mType(TYPE)
+{
+	mTexture = new sf::Texture();
+	if (!mTexture->loadFromFile(FILENAME))
+	{
+		std::cout << "Player: Couldn't load texture!\n";
+	}
+		
+	mSprite = new sf::Sprite(*mTexture);
+	mSprite->setPosition(START_POS);
+	mSprite->setScale(SCALE);
+}
+
+Player::Player(const Player& other)
+	: mType(other.mType)
+{
+	mSprite = new sf::Sprite;
+	*mSprite = *other.mSprite;
+}
+
+Player::~Player()
+{
+	delete mSprite;
+}
+#pragma endregion
 
 #pragma region Private Functions
 
@@ -37,19 +50,19 @@ void Player::Movement()
 {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 	{
-		mSprite.move(-PLAYER_SPEED, 0.0f);
+		mSprite->move(-SPEED, 0.0f);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 	{
-		mSprite.move(PLAYER_SPEED, 0.0f);
+		mSprite->move(SPEED, 0.0f);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 	{
-		mSprite.move(0.0f,-PLAYER_SPEED);
+		mSprite->move(0.0f,-SPEED);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 	{
-		mSprite.move(0.0f, PLAYER_SPEED);
+		mSprite->move(0.0f, SPEED);
 	}
 }
 
@@ -64,12 +77,12 @@ EntityType Player::GetType() const
 
 const sf::Vector2f& Player::GetPosition() const
 {
-	return mSprite.getPosition();
+	return mSprite->getPosition();
 }
 
-sf::Sprite Player::GetSprite()
+sf::Sprite* Player::GetSprite()
 {
 	return mSprite;
 }
 
-#pragma endregion 
+#pragma endregion
