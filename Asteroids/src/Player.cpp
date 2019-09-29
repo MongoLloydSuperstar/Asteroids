@@ -7,7 +7,8 @@ const EntityType TYPE = PlayerType;
 const float SPEED = 5.0f;
 const sf::Vector2f SCALE(1.0f, 1.0f);
 const sf::Vector2f START_POS(400.0f, 300.0f);
-
+const int SCREEN_WIDTH = 768;
+const int SCREEN_HEIGHT = 1024;
 const std::string FILENAME("ShipSprite.psd");
 
 
@@ -25,7 +26,7 @@ Player::Player()
 	{
 		std::cout << "Player: Couldn't load texture!\n";
 	}
-		
+
 	mSprite = new sf::Sprite(*mTexture);
 	mSprite->setPosition(START_POS);
 	mSprite->setScale(SCALE);
@@ -45,27 +46,53 @@ Player::~Player()
 #pragma endregion
 
 #pragma region Private Functions
-
 void Player::Movement()
 {
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+	const float xPos = mSprite->getPosition().x;
+	const float yPos = mSprite->getPosition().y;
+
+	const float xSize = mSprite->getLocalBounds().width;
+	const float ySize = mSprite->getLocalBounds().height;
+
+	const float xMax = SCREEN_WIDTH - xSize;
+	const float yMax = SCREEN_HEIGHT - ySize;
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && xPos > 0.0f)
 	{
 		mSprite->move(-SPEED, 0.0f);
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+	}	
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && xPos < xMax)
 	{
 		mSprite->move(SPEED, 0.0f);
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && yPos > 0.0f)
 	{
-		mSprite->move(0.0f,-SPEED);
+		mSprite->move(0.0f, -SPEED);
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && yPos < yMax)
 	{
 		mSprite->move(0.0f, SPEED);
 	}
-}
 
+	// Test boundary
+	if (xPos < 0)
+	{
+		mSprite->setPosition(0.0f, yPos);
+	}
+	if (xPos > xMax)
+	{
+		mSprite->setPosition(xMax, yPos);
+	}
+	if (yPos < 0)
+	{
+		mSprite->setPosition(xPos, 0.0f);
+	}
+	if (yPos > yMax)
+	{
+		mSprite->setPosition(xPos, yMax);
+	}
+	
+}
 #pragma endregion
 
 #pragma region Getters/Setters

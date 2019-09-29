@@ -26,5 +26,6 @@ private:
 	sf::Sprite* mSprite;
 	sf::Texture* mTexture;
 	EntityType mType;
+
 };
 

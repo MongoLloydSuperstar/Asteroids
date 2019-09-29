@@ -9,6 +9,7 @@ const sf::Vector2f SCALE(1.0f, 1.0f);
 const sf::Vector2f START_POS(400.0f, 300.0f);
 const float Coin::SPAWN_COOLDOWN = 3.3f;
 const int SCREEN_WIDTH = 768;
+const int SCREEN_HEIGHT = 1024;
 
 const std::string FILENAME = "CoinSprite.psd";
 
