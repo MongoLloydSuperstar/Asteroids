@@ -7,9 +7,11 @@ class Player : public Entity
 public:
 	void Update() override;
 
-	Player();
-	explicit Player(const Player& other);
+	Player() = delete;
 	virtual ~Player();
+	explicit Player(const sf::Texture& texture);
+	explicit Player(const Player& other);
+
 
 	EntityType GetType() const override;
 	virtual const sf::Vector2f& GetPosition() const override;
@@ -17,9 +19,13 @@ public:
 
 private:
 	void Movement();
+	
+public:
+	static const std::string FILENAME;
 
+private:
 	sf::Sprite* mSprite;
-	sf::Texture* mTexture;
+	sf::Texture mTexture;
 	EntityType mType;
 
 };

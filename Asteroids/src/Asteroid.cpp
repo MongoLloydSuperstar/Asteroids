@@ -11,7 +11,7 @@ const float Asteroid::SPAWN_COOLDOWN = 1.0f;
 const int SCREEN_WIDTH = 768;
 const int SCREEN_HEIGHT = 1024;
 
-const std::string FILENAME = "AsteroidSprite.psd";
+const std::string Asteroid::FILENAME = "AsteroidSprite.psd";
 
 void Asteroid::Update()
 {
@@ -20,27 +20,17 @@ void Asteroid::Update()
 }
 
 #pragma region Con-/Destructors
-Asteroid::Asteroid()
+Asteroid::Asteroid(sf::Texture& texture)
 	: mType(TYPE)
 {
-	mTexture = new sf::Texture();
-	if (!mTexture->loadFromFile(FILENAME))
-	{
-		std::cout << "Asteroid: Couldn't load texture!\n";
-	}
-
-	mSprite = new sf::Sprite(*mTexture);
+	mSprite = new sf::Sprite(texture);
 	mSprite->setScale(SCALE);
-
 }
 
 Asteroid::Asteroid(const Asteroid& other)
 	: mType(other.mType)
-{
-	mTexture = new sf::Texture();
-	*mTexture = *other.mTexture;
-	
-	mSprite = new sf::Sprite;
+{	
+	mSprite = new sf::Sprite();
 	*mSprite = *other.mSprite;
 
 	mSprite->setPosition(RandomStartPos());
@@ -50,7 +40,6 @@ Asteroid::Asteroid(const Asteroid& other)
 Asteroid::~Asteroid()
 {
 	delete mSprite;
-	delete mTexture;
 }
 #pragma endregion
 

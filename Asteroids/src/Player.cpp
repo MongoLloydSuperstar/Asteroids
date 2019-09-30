@@ -9,7 +9,7 @@ const sf::Vector2f SCALE(1.0f, 1.0f);
 const sf::Vector2f START_POS(400.0f, 300.0f);
 const int SCREEN_WIDTH = 768;
 const int SCREEN_HEIGHT = 1024;
-const std::string FILENAME("ShipSprite.psd");
+const std::string Player::FILENAME("ShipSprite.psd");
 
 
 void Player::Update()
@@ -18,23 +18,17 @@ void Player::Update()
 }
 
 #pragma region Con-/Destructors
-Player::Player()
+Player::Player(const sf::Texture& texture)
 	: mType(TYPE)
 {
-	mTexture = new sf::Texture();
-	if (!mTexture->loadFromFile(FILENAME))
-	{
-		std::cout << "Player: Couldn't load texture!\n";
-	}
-
-	mSprite = new sf::Sprite(*mTexture);
+	mSprite = new sf::Sprite(texture);
 	mSprite->setPosition(START_POS);
 	mSprite->setScale(SCALE);
 }
 
 Player::Player(const Player& other)
 	: mType(other.mType)
-{
+{	
 	mSprite = new sf::Sprite;
 	*mSprite = *other.mSprite;
 }
@@ -42,8 +36,9 @@ Player::Player(const Player& other)
 Player::~Player()
 {
 	delete mSprite;
-	delete mTexture;
 }
+
+
 #pragma endregion
 
 #pragma region Private Functions
@@ -112,5 +107,4 @@ sf::Sprite* Player::GetSprite()
 {
 	return mSprite;
 }
-
 #pragma endregion

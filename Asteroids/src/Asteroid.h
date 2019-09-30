@@ -7,7 +7,8 @@ class Asteroid : public Entity
 public:
 	void Update() override;
 
-	Asteroid();
+	Asteroid() = delete;
+	explicit Asteroid(sf::Texture& texture);
 	explicit Asteroid(const Asteroid& other);
 	virtual ~Asteroid();
 
@@ -22,10 +23,12 @@ private:
 
 public:
 	static const float SPAWN_COOLDOWN;
+	static const std::string FILENAME;
 	
 private:
+
 	sf::Sprite* mSprite;
-	sf::Texture* mTexture;
+	sf::Texture mTexture;
 	EntityType mType;
 
 };

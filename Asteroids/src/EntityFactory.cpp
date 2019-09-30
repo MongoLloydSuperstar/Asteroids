@@ -1,10 +1,28 @@
 #include "EntityFactory.h"
+#include "Player.h"
+#include "Asteroid.h"
+#include "Coin.h"
+#include <iostream>
+
 
 EntityFactory::EntityFactory()
 {
-	mPlayer = new Player;
-	mAsteroid = new Asteroid;
-	mCoin = new Coin;
+	if (!mPlayerTexture.loadFromFile(Player::FILENAME))
+	{
+		std::cout << "Asteroid: Couldn't load texture!\n";
+	}
+	if (!mAsteroidTexture.loadFromFile(Asteroid::FILENAME))
+	{
+		std::cout << "Asteroid: Couldn't load texture!\n";
+	}
+	if (!mCoinTexture.loadFromFile(Coin::FILENAME))
+	{
+		std::cout << "Asteroid: Couldn't load texture!\n";
+	}
+	
+	mPlayer = new Player(mPlayerTexture);
+	mAsteroid = new Asteroid(mAsteroidTexture);
+	mCoin = new Coin(mCoinTexture);
 }
 
 Entity* EntityFactory::CreatePlayer()
@@ -26,4 +44,14 @@ Entity* EntityFactory::CreateCoin()
 	Entity* p = new Coin(*mCoin);
 
 	return p;
+}
+
+float EntityFactory::GetAsteroidCld()
+{
+	return Asteroid::SPAWN_COOLDOWN;
+}
+
+float EntityFactory::GetCoinCld()
+{
+	return Coin::SPAWN_COOLDOWN;
 }

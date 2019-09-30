@@ -39,8 +39,8 @@ void Game::Update()
 		RemoveDead(i);
 	}
 
-	SpawnAsteroid(Asteroid::SPAWN_COOLDOWN);
-	SpawnCoin(Coin::SPAWN_COOLDOWN);
+	SpawnAsteroid(EntityFactory::GetAsteroidCld());
+	SpawnCoin(EntityFactory::GetCoinCld());
 }
 
 void Game::Render()

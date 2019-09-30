@@ -11,7 +11,7 @@ const float Coin::SPAWN_COOLDOWN = 3.3f;
 const int SCREEN_WIDTH = 768;
 const int SCREEN_HEIGHT = 1024;
 
-const std::string FILENAME = "CoinSprite.psd";
+const std::string Coin::FILENAME = "CoinSprite.psd";
 
 void Coin::Update()
 {
@@ -20,27 +20,17 @@ void Coin::Update()
 }
 
 #pragma region Con-/Destructors
-Coin::Coin()
+Coin::Coin(sf::Texture& texture)
 	: mType(TYPE)
 {
-	mTexture = new sf::Texture();
-	if (!mTexture->loadFromFile(FILENAME))
-	{
-		std::cout << "Coin: Couldn't load texture!\n";
-	}
-
-	mSprite = new sf::Sprite(*mTexture);
-	mSprite->setPosition(START_POS);
+	mSprite = new sf::Sprite(texture);
 	mSprite->setScale(SCALE);
 }
 
 Coin::Coin(const Coin& other)
 	: mType(other.mType)
 {
-	mTexture = new sf::Texture();
-	*mTexture = *other.mTexture;
-	
-	mSprite = new sf::Sprite;
+	mSprite = new sf::Sprite();
 	*mSprite = *other.mSprite;
 
 	mSprite->setPosition(RandomStartPos());
@@ -49,7 +39,6 @@ Coin::Coin(const Coin& other)
 Coin::~Coin()
 {
 	delete mSprite;
-	delete mTexture;
 }
 #pragma endregion
 

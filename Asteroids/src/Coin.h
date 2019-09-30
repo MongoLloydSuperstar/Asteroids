@@ -7,7 +7,8 @@ class Coin : public Entity
 public:
 	void Update() override;
 
-	Coin();
+	Coin() = delete;
+	explicit Coin(sf::Texture& texture);
 	explicit Coin(const Coin& other);
 	virtual ~Coin();
 	
@@ -23,10 +24,12 @@ private:
 	
 public:
 	static const float SPAWN_COOLDOWN;
+	static const std::string FILENAME;
 	
 private:
+
 	sf::Sprite* mSprite;
-	sf::Texture* mTexture;
+	sf::Texture mTexture;
 	EntityType mType;
 
 };
