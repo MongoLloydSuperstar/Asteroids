@@ -42,6 +42,7 @@ Player::Player(const Player& other)
 Player::~Player()
 {
 	delete mSprite;
+	delete mTexture;
 }
 #pragma endregion
 

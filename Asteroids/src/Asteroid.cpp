@@ -16,6 +16,7 @@ const std::string FILENAME = "AsteroidSprite.psd";
 void Asteroid::Update()
 {
 	Movement();
+	KillConditions();
 }
 
 #pragma region Con-/Destructors
@@ -49,6 +50,7 @@ Asteroid::Asteroid(const Asteroid& other)
 Asteroid::~Asteroid()
 {
 	delete mSprite;
+	delete mTexture;
 }
 #pragma endregion
 
@@ -56,6 +58,23 @@ Asteroid::~Asteroid()
 void Asteroid::Movement()
 {
 	mSprite->move(0.0f, SPEED);
+}
+
+void Asteroid::KillConditions()
+{
+	const float xPos = mSprite->getPosition().x;
+	const float yPos = mSprite->getPosition().y;
+	
+	const float xSize = mSprite->getLocalBounds().width;
+	const float ySize = mSprite->getLocalBounds().height;
+	
+	const float xMax = SCREEN_WIDTH - xSize;
+	const float yMax = SCREEN_HEIGHT - ySize;
+
+	if (yPos > yMax)
+	{
+		mIsAlive = false;
+	}
 }
 
 sf::Vector2f Asteroid::RandomStartPos()

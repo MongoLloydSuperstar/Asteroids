@@ -16,6 +16,7 @@ const std::string FILENAME = "CoinSprite.psd";
 void Coin::Update()
 {
 	Movement();
+	KillConditions();
 }
 
 #pragma region Con-/Destructors
@@ -48,6 +49,7 @@ Coin::Coin(const Coin& other)
 Coin::~Coin()
 {
 	delete mSprite;
+	delete mTexture;
 }
 #pragma endregion
 
@@ -55,6 +57,23 @@ Coin::~Coin()
 void Coin::Movement()
 {
 	mSprite->move(0.0f, SPEED);
+}
+
+void Coin::KillConditions()
+{
+	const float xPos = mSprite->getPosition().x;
+	const float yPos = mSprite->getPosition().y;
+
+	const float xSize = mSprite->getLocalBounds().width;
+	const float ySize = mSprite->getLocalBounds().height;
+
+	const float xMax = SCREEN_WIDTH - xSize;
+	const float yMax = SCREEN_HEIGHT - ySize;
+
+	if (yPos > yMax - 100)
+	{
+		mIsAlive = false;
+	}
 }
 
 sf::Vector2f Coin::RandomStartPos()

@@ -10,19 +10,18 @@ public:
 	Game(sf::VideoMode videoMode, const std::string& title);
 	~Game();
 
-	void Run();
-	
-	void Update();
-	void Render();
-
 	void Init();
+	void Run();
 
 	sf::RenderWindow& GetRenderWindow();
 
 private:
+	void Update();
+	void Render();
+	
 	void SpawnAsteroid(float cooldown);
 	void SpawnCoin(float cooldown);
-	
+	void RemoveDead(int i);
 	
 private:
 	typedef std::vector<Entity*> entities_t;

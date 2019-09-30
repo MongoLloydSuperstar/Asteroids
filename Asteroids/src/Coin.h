@@ -17,8 +17,10 @@ public:
 	
 private:
 	void Movement();
+	void KillConditions();
 	sf::Vector2f RandomStartPos();
 
+	
 public:
 	static const float SPAWN_COOLDOWN;
 	

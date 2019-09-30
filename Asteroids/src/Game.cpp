@@ -32,9 +32,11 @@ void Game::Run()
 
 void Game::Update()
 {
-	for (Entity* e : mEntities)
+
+	for (int i = 0; i < mEntities.size(); i++)
 	{
-		e->Update();
+		mEntities[i]->Update();
+		RemoveDead(i);
 	}
 
 	SpawnAsteroid(Asteroid::SPAWN_COOLDOWN);
@@ -80,5 +82,14 @@ void Game::SpawnCoin(float cooldown)
 	{
 		mEntities.push_back(mFactory.CreateCoin());
 		mCoinClock.restart();
+	}
+}
+
+void Game::RemoveDead(int i)
+{
+	if (!mEntities[i]->IsAlive())
+	{
+		delete mEntities[i];
+		mEntities.erase(mEntities.begin() + i);
 	}
 }

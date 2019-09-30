@@ -19,5 +19,8 @@ public:
 	virtual EntityType GetType() const = 0;
 	virtual const sf::Vector2f& GetPosition() const = 0;
 	virtual sf::Sprite* GetSprite() = 0;
-	
+	virtual bool IsAlive() { return mIsAlive; }
+
+protected:
+	bool mIsAlive = true;
 };
