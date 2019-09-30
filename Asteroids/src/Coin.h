@@ -23,7 +23,7 @@ private:
 
 	
 public:
-	static const float SPAWN_COOLDOWN;
+	static const sf::Vector2f SPAWN_COOLDOWN;
 	static const std::string FILENAME;
 	
 private:

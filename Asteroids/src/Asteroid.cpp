@@ -7,7 +7,7 @@ const EntityType TYPE = EnemyType;
 const float SPEED = 5.0f;
 const sf::Vector2f SCALE(1.0f, 1.0f);
 const sf::Vector2f START_POS(400.0f, 300.0f);
-const float Asteroid::SPAWN_COOLDOWN = 1.0f;
+const sf::Vector2f Asteroid::SPAWN_COOLDOWN(0.5f, 2.0f);
 const int SCREEN_WIDTH = 768;
 const int SCREEN_HEIGHT = 1024;
 
@@ -34,7 +34,6 @@ Asteroid::Asteroid(const Asteroid& other)
 	*mSprite = *other.mSprite;
 
 	mSprite->setPosition(RandomStartPos());
-
 }
 
 Asteroid::~Asteroid()
@@ -68,8 +67,13 @@ void Asteroid::KillConditions()
 
 sf::Vector2f Asteroid::RandomStartPos()
 {
-	sf::Vector2f pos(static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / SCREEN_WIDTH)), 1.0f);
-	return pos;
+	float random = (float)rand() / (float)RAND_MAX;
+	float range = SCREEN_WIDTH - mSprite->getLocalBounds().width;
+
+	float xPos = random * range;
+	float yPos = -mSprite->getLocalBounds().height;
+	
+	return sf::Vector2f(xPos, yPos);
 }
 #pragma endregion
 

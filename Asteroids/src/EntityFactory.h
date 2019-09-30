@@ -6,7 +6,6 @@ class Player;
 class Asteroid;
 class Coin;
 
-
 class EntityFactory
 {
 public:
@@ -17,8 +16,8 @@ public:
 	Entity* CreateAsteroid();
 	Entity* CreateCoin();
 
-	static float GetAsteroidCld();
-	static float GetCoinCld();
+	static sf::Vector2f GetAsteroidCld();
+	static sf::Vector2f GetCoinCld();
 	
 
 private:

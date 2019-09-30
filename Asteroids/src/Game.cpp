@@ -3,6 +3,7 @@
 Game::Game(const sf::VideoMode videoMode, const std::string& title)
 	: mWindow(videoMode, title)
 {
+	
 }
 
 Game::~Game()
@@ -39,8 +40,8 @@ void Game::Update()
 		RemoveDead(i);
 	}
 
-	SpawnAsteroid(EntityFactory::GetAsteroidCld());
-	SpawnCoin(EntityFactory::GetCoinCld());
+	SpawnAsteroid(EntityFactory::GetAsteroidCld().x, EntityFactory::GetAsteroidCld().y);
+	SpawnCoin(EntityFactory::GetCoinCld().x, EntityFactory::GetCoinCld().y);
 }
 
 void Game::Render()
@@ -67,8 +68,13 @@ sf::RenderWindow& Game::GetRenderWindow()
 	return mWindow;
 }
 
-void Game::SpawnAsteroid(float cooldown)
+void Game::SpawnAsteroid(const float min, const float max)
 {
+	float random = (float)rand() / (float)RAND_MAX;
+	float range = max - min;
+
+	float cooldown = (random * range) + min;
+	
 	if (mAsteroidClock.getElapsedTime().asSeconds() >= cooldown)
 	{
 		mEntities.push_back(mFactory.CreateAsteroid());
@@ -76,13 +82,26 @@ void Game::SpawnAsteroid(float cooldown)
 	}
 }
 
-void Game::SpawnCoin(float cooldown)
+void Game::SpawnCoin(const float min, const float max)
 {
+	float random = (float)rand() / (float)RAND_MAX;
+	float range = max - min;
+	
+	float cooldown = (random * range) + min;
+	
 	if (mCoinClock.getElapsedTime().asSeconds() >= cooldown)
 	{
 		mEntities.push_back(mFactory.CreateCoin());
 		mCoinClock.restart();
 	}
+}
+
+void Game::RandomizeCooldown(Cooldown& cooldown)
+{
+	float random = (float)rand() / (float)RAND_MAX;
+	float range = max - min;
+
+	float cooldown = (random * range) + min;
 }
 
 void Game::RemoveDead(int i)

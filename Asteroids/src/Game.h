@@ -16,11 +16,27 @@ public:
 	sf::RenderWindow& GetRenderWindow();
 
 private:
+	struct Cooldown
+	{
+		Cooldown(float min, float max)
+			: min(min), max(max)
+		{}
+
+		float GetRandom()
+		{
+			
+		}
+		
+		
+		float min, max;
+	};
+	
 	void Update();
 	void Render();
 	
-	void SpawnAsteroid(float cooldown);
-	void SpawnCoin(float cooldown);
+	void SpawnAsteroid(float min, float max);
+	void SpawnCoin(float min, float max);
+	void RandomizeCooldown(Cooldown& cooldown);
 	void RemoveDead(int i);
 	
 private:
@@ -32,5 +48,7 @@ private:
 	sf::RenderWindow mWindow;
 	sf::Clock mAsteroidClock;
 	sf::Clock mCoinClock;
+
+	Cooldown mAsteroidCDRange, mCoinCDRange;
 };
 

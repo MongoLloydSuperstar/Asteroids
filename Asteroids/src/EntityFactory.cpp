@@ -46,12 +46,12 @@ Entity* EntityFactory::CreateCoin()
 	return p;
 }
 
-float EntityFactory::GetAsteroidCld()
+sf::Vector2f EntityFactory::GetAsteroidCld()
 {
 	return Asteroid::SPAWN_COOLDOWN;
 }
 
-float EntityFactory::GetCoinCld()
+sf::Vector2f EntityFactory::GetCoinCld()
 {
 	return Coin::SPAWN_COOLDOWN;
 }

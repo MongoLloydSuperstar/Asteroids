@@ -7,7 +7,7 @@ const EntityType TYPE = PickupType;
 const float SPEED = 5.0f;
 const sf::Vector2f SCALE(1.0f, 1.0f);
 const sf::Vector2f START_POS(400.0f, 300.0f);
-const float Coin::SPAWN_COOLDOWN = 3.3f;
+const sf::Vector2f Coin::SPAWN_COOLDOWN(1.5f, 5.0f);
 const int SCREEN_WIDTH = 768;
 const int SCREEN_HEIGHT = 1024;
 
@@ -67,8 +67,13 @@ void Coin::KillConditions()
 
 sf::Vector2f Coin::RandomStartPos()
 {
-	sf::Vector2f pos(static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / SCREEN_WIDTH)), 1.0f);
-	return pos;
+	float random = (float)rand() / (float)RAND_MAX;
+	float range = SCREEN_WIDTH - mSprite->getLocalBounds().width;
+
+	float xPos = random * range;
+	float yPos = -mSprite->getLocalBounds().height;
+
+	return sf::Vector2f(xPos, yPos);
 }
 #pragma endregion
 
