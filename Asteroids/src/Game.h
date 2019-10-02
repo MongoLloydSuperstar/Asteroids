@@ -1,7 +1,8 @@
 #pragma once
 
-#include "Entity.h"
 #include <vector>
+
+#include "Entity.h"
 #include "EntityFactory.h"
 
 class Game
@@ -16,29 +17,16 @@ public:
 	sf::RenderWindow& GetRenderWindow();
 
 private:
-	struct Cooldown
-	{
-		Cooldown(float min, float max)
-			: min(min), max(max)
-		{}
-
-		float GetRandom()
-		{
-			
-		}
-		
-		
-		float min, max;
-	};
-	
 	void Update();
 	void Render();
 	
 	void SpawnAsteroid(float min, float max);
 	void SpawnCoin(float min, float max);
-	void RandomizeCooldown(Cooldown& cooldown);
 	void RemoveDead(int i);
-	
+
+	bool CollisionManagement();
+	bool CollisionDetection(Entity* player, Entity* other);
+
 private:
 	typedef std::vector<Entity*> entities_t;
 
@@ -49,6 +37,6 @@ private:
 	sf::Clock mAsteroidClock;
 	sf::Clock mCoinClock;
 
-	Cooldown mAsteroidCDRange, mCoinCDRange;
+	float mAsteroidCooldown, mCoinCooldown;
 };
 

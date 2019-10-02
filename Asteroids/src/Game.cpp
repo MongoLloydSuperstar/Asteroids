@@ -1,9 +1,11 @@
 #include "Game.h"
+#include <iostream>
 
 Game::Game(const sf::VideoMode videoMode, const std::string& title)
 	: mWindow(videoMode, title)
 {
-	
+	mAsteroidCooldown = Entity::RandomizeRangef(EntityFactory::GetAsteroidCld().x, EntityFactory::GetAsteroidCld().y);
+	mCoinCooldown = Entity::RandomizeRangef(EntityFactory::GetCoinCld().x, EntityFactory::GetCoinCld().y);
 }
 
 Game::~Game()
@@ -13,6 +15,16 @@ Game::~Game()
 		delete e;
 	}
 	mEntities.clear();
+}
+
+
+void Game::Init()
+{
+	srand((unsigned int)time(nullptr));
+	
+	mWindow.setVerticalSyncEnabled(true);
+	
+	mEntities.push_back(mFactory.CreatePlayer());
 }
 
 void Game::Run()
@@ -42,6 +54,8 @@ void Game::Update()
 
 	SpawnAsteroid(EntityFactory::GetAsteroidCld().x, EntityFactory::GetAsteroidCld().y);
 	SpawnCoin(EntityFactory::GetCoinCld().x, EntityFactory::GetCoinCld().y);
+
+	CollisionManagement();
 }
 
 void Game::Render()
@@ -56,52 +70,31 @@ void Game::Render()
 	mWindow.display();
 }
 
-void Game::Init()
-{
-	mWindow.setVerticalSyncEnabled(true);
-	
-	mEntities.push_back(mFactory.CreatePlayer());
-}
 
 sf::RenderWindow& Game::GetRenderWindow()
 {
 	return mWindow;
 }
 
+
 void Game::SpawnAsteroid(const float min, const float max)
 {
-	float random = (float)rand() / (float)RAND_MAX;
-	float range = max - min;
-
-	float cooldown = (random * range) + min;
-	
-	if (mAsteroidClock.getElapsedTime().asSeconds() >= cooldown)
+	if (mAsteroidClock.getElapsedTime().asSeconds() >= mAsteroidCooldown)
 	{
 		mEntities.push_back(mFactory.CreateAsteroid());
+		mAsteroidCooldown = Entity::RandomizeRangef(EntityFactory::GetAsteroidCld());
 		mAsteroidClock.restart();
 	}
 }
 
 void Game::SpawnCoin(const float min, const float max)
-{
-	float random = (float)rand() / (float)RAND_MAX;
-	float range = max - min;
-	
-	float cooldown = (random * range) + min;
-	
-	if (mCoinClock.getElapsedTime().asSeconds() >= cooldown)
+{	
+	if (mCoinClock.getElapsedTime().asSeconds() >= mCoinCooldown)
 	{
 		mEntities.push_back(mFactory.CreateCoin());
+		mCoinCooldown= Entity::RandomizeRangef(EntityFactory::GetCoinCld());
 		mCoinClock.restart();
 	}
-}
-
-void Game::RandomizeCooldown(Cooldown& cooldown)
-{
-	float random = (float)rand() / (float)RAND_MAX;
-	float range = max - min;
-
-	float cooldown = (random * range) + min;
 }
 
 void Game::RemoveDead(int i)
@@ -111,4 +104,59 @@ void Game::RemoveDead(int i)
 		delete mEntities[i];
 		mEntities.erase(mEntities.begin() + i);
 	}
+}
+
+bool Game::CollisionManagement()
+{
+	Entity* player = nullptr;
+		
+	while (player == nullptr)
+	{
+		for (Entity* e : mEntities)
+		{
+			if (e->GetType() == PlayerType)
+			{
+				player = e;
+			}
+		}
+		if (player == nullptr)
+		{
+			std::cout << "ERROR: There is no player!\n";
+			return false;
+		}		
+	}
+
+	for (Entity* e : mEntities)
+	{
+		// Test if collision unless it's PlayerType.
+		// PlayerType is always false		
+		if (e->GetType() == EnemyType && CollisionDetection(player, e))
+		{
+			mWindow.close();
+		}
+		else if (e->GetType() == PickupType && CollisionDetection(player, e))
+		{
+			e->Kill();
+		}
+	}
+
+	return true;
+}
+
+bool Game::CollisionDetection(Entity* player, Entity* other)
+{
+	float xPlayer = player->GetPosition().x;
+	float yPlayer = player->GetPosition().y;
+
+	float xOther = other->GetPosition().x;
+	float yOther = other->GetPosition().y;
+
+	float xDist = xPlayer - xOther;
+	float yDist = yPlayer - yOther;
+
+	float minCollisionDist = player->GetRadius() + other->GetRadius();
+
+	float distance = sqrtf(powf(xDist, 2) + powf(yDist, 2));
+
+	return distance < minCollisionDist ? true : false;
 }

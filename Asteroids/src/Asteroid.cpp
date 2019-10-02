@@ -4,7 +4,7 @@
 
 const EntityType TYPE = EnemyType;
 
-const float SPEED = 5.0f;
+const sf::Vector2f SPEED_RANGE(2.0f, 5.0f);
 const sf::Vector2f SCALE(1.0f, 1.0f);
 const sf::Vector2f START_POS(400.0f, 300.0f);
 const sf::Vector2f Asteroid::SPAWN_COOLDOWN(0.5f, 2.0f);
@@ -21,19 +21,23 @@ void Asteroid::Update()
 
 #pragma region Con-/Destructors
 Asteroid::Asteroid(sf::Texture& texture)
-	: mType(TYPE)
+	: mType(TYPE), mSpeed(0.0f)
 {
+	mRadius = texture.getSize().x / 2;
+	
 	mSprite = new sf::Sprite(texture);
 	mSprite->setScale(SCALE);
 }
 
 Asteroid::Asteroid(const Asteroid& other)
-	: mType(other.mType)
+	: mType(other.mType), mRadius(other.mRadius)
 {	
 	mSprite = new sf::Sprite();
 	*mSprite = *other.mSprite;
 
 	mSprite->setPosition(RandomStartPos());
+
+	mSpeed = RandomizeRangef(SPEED_RANGE);
 }
 
 Asteroid::~Asteroid()
@@ -45,7 +49,7 @@ Asteroid::~Asteroid()
 #pragma region Private Functions
 void Asteroid::Movement()
 {
-	mSprite->move(0.0f, SPEED);
+	mSprite->move(0.0f, mSpeed);
 }
 
 void Asteroid::KillConditions()
@@ -67,10 +71,9 @@ void Asteroid::KillConditions()
 
 sf::Vector2f Asteroid::RandomStartPos()
 {
-	float random = (float)rand() / (float)RAND_MAX;
 	float range = SCREEN_WIDTH - mSprite->getLocalBounds().width;
 
-	float xPos = random * range;
+	float xPos = RandomizeRangef(0.0f, range);
 	float yPos = -mSprite->getLocalBounds().height;
 	
 	return sf::Vector2f(xPos, yPos);
@@ -91,5 +94,10 @@ const sf::Vector2f& Asteroid::GetPosition() const
 sf::Sprite* Asteroid::GetSprite()
 {
 	return mSprite;
+}
+
+float Asteroid::GetRadius() const
+{
+	return mRadius;
 }
 #pragma endregion

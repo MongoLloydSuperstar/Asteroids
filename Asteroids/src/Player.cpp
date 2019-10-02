@@ -9,6 +9,7 @@ const sf::Vector2f SCALE(1.0f, 1.0f);
 const sf::Vector2f START_POS(400.0f, 300.0f);
 const int SCREEN_WIDTH = 768;
 const int SCREEN_HEIGHT = 1024;
+
 const std::string Player::FILENAME("ShipSprite.psd");
 
 
@@ -21,13 +22,15 @@ void Player::Update()
 Player::Player(const sf::Texture& texture)
 	: mType(TYPE)
 {
+	mRadius = texture.getSize().x / 2;
+	
 	mSprite = new sf::Sprite(texture);
 	mSprite->setPosition(START_POS);
 	mSprite->setScale(SCALE);
 }
 
 Player::Player(const Player& other)
-	: mType(other.mType)
+	: mType(other.mType), mRadius(other.mRadius)
 {	
 	mSprite = new sf::Sprite;
 	*mSprite = *other.mSprite;
@@ -96,6 +99,11 @@ void Player::Movement()
 EntityType Player::GetType() const
 {
 	return mType;
+}
+
+float Player::GetRadius() const
+{
+	return mRadius;
 }
 
 const sf::Vector2f& Player::GetPosition() const

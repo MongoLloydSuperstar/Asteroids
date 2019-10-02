@@ -4,7 +4,7 @@
 
 const EntityType TYPE = PickupType;
 
-const float SPEED = 5.0f;
+const sf::Vector2f SPEED_RANGE(2.0f, 5.0f);
 const sf::Vector2f SCALE(1.0f, 1.0f);
 const sf::Vector2f START_POS(400.0f, 300.0f);
 const sf::Vector2f Coin::SPAWN_COOLDOWN(1.5f, 5.0f);
@@ -23,17 +23,21 @@ void Coin::Update()
 Coin::Coin(sf::Texture& texture)
 	: mType(TYPE)
 {
+	mRadius = texture.getSize().x / 2;
+	
 	mSprite = new sf::Sprite(texture);
 	mSprite->setScale(SCALE);
 }
 
 Coin::Coin(const Coin& other)
-	: mType(other.mType)
+	: mType(other.mType), mRadius(other.mRadius)
 {
 	mSprite = new sf::Sprite();
 	*mSprite = *other.mSprite;
 
 	mSprite->setPosition(RandomStartPos());
+	
+	mSpeed = RandomizeRangef(SPEED_RANGE);
 }
 
 Coin::~Coin()
@@ -45,7 +49,7 @@ Coin::~Coin()
 #pragma region Private Functions
 void Coin::Movement()
 {
-	mSprite->move(0.0f, SPEED);
+	mSprite->move(0.0f, mSpeed);
 }
 
 void Coin::KillConditions()
@@ -67,10 +71,9 @@ void Coin::KillConditions()
 
 sf::Vector2f Coin::RandomStartPos()
 {
-	float random = (float)rand() / (float)RAND_MAX;
 	float range = SCREEN_WIDTH - mSprite->getLocalBounds().width;
 
-	float xPos = random * range;
+	float xPos = RandomizeRangef(0.0f, range);
 	float yPos = -mSprite->getLocalBounds().height;
 
 	return sf::Vector2f(xPos, yPos);
@@ -92,6 +95,11 @@ const sf::Vector2f& Coin::GetPosition() const
 sf::Sprite* Coin::GetSprite()
 {
 	return mSprite;
+}
+
+float Coin::GetRadius() const
+{
+	return mRadius;
 }
 
 #pragma endregion

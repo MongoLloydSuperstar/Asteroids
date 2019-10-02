@@ -12,11 +12,12 @@ public:
 	explicit Player(const sf::Texture& texture);
 	explicit Player(const Player& other);
 
-
 	EntityType GetType() const override;
+	float GetRadius() const override;
 	virtual const sf::Vector2f& GetPosition() const override;
 	virtual sf::Sprite* GetSprite() override;
 
+	
 private:
 	void Movement();
 	
@@ -28,4 +29,5 @@ private:
 	sf::Texture mTexture;
 	EntityType mType;
 
+	float mRadius;
 };
